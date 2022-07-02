@@ -2,7 +2,10 @@ const Sauce = require('../models/sauce');
 
 //Création 
 exports.addLikeOrDislike = (req, res, next) => {
-    if (req.body.like == 1) {
+
+  Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+
+    if (req.body.like == 1 && !sauce.usersLiked.includes(req.body.userId)) {
       Sauce.updateOne(
         { _id: req.params.id },
         {
@@ -15,7 +18,7 @@ exports.addLikeOrDislike = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
     }
   
-    if (req.body.like == -1) {
+    if (req.body.like == -1 && !sauce.usersDisliked.includes(req.body.userId)) {
       Sauce.updateOne(
         { _id: req.params.id },
         {
@@ -37,6 +40,7 @@ exports.addLikeOrDislike = (req, res, next) => {
           }
         }
         //Si l'utilisateur n'est pas dans userLiked => cela signifie qu'il n'a pas aimé la sauce, donc annulez le vote dans userDisliked
+        
         if (usersLikedFound == false) {
           Sauce.updateOne(
             { _id: req.params.id },
@@ -60,4 +64,5 @@ exports.addLikeOrDislike = (req, res, next) => {
         }
       });
     }
+  }) 
   };

@@ -17,7 +17,9 @@ const userRoutes = require("./routes/user");
 const app = express();
 
 //Connexion à la base de donnés MongoDB
- mongoose.connect('mongodb+srv://Kovu:gaia@cluster0.wgeq5.mongodb.net/?retryWrites=true&w=majority',
+const DATABASE = process.env.DATABASE;
+
+ mongoose.connect( DATABASE,
 { useNewUrlParser: true,
   useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
